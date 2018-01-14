@@ -11,6 +11,7 @@ seed(1)
 from tensorflow import set_random_seed
 set_random_seed(2)
 
+
 batch_size = 32
 
 classes = ['0','1']
@@ -23,15 +24,20 @@ train_path='training_data'
 
 data = dataset.read_train_sets(train_path, img_size, classes, validation_size=validation_size)
 
+
 print("Complete reading input data. Will Now print a snippet of it")
 print("Number of files in Training-set:\t\t{}".format(len(data.train.labels)))
 print("Number of files in Validation-set:\t{}".format(len(data.valid.labels)))
+
+
 
 session = tf.Session()
 x = tf.placeholder(tf.float32, shape=[None, img_size,img_size,num_channels], name='x')
 
 y_true = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true')
 y_true_cls = tf.argmax(y_true, dimension=1)
+
+
 
 filter_size_conv1 = 3 
 num_filters_conv1 = 32
@@ -135,7 +141,7 @@ session.run(tf.global_variables_initializer())
 cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=layer_fc2,
                                                     labels=y_true)
 cost = tf.reduce_mean(cross_entropy)
-optimizer = tf.train.AdamOptimizer(learning_rate=1e-4).minimize(cost)
+optimizer = tf.train.AdamOptimizer(learning_rate=1e-3).minimize(cost)
 correct_prediction = tf.equal(y_pred_cls, y_true_cls)
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
@@ -178,5 +184,5 @@ def train(num_iteration):
 
 
     total_iterations += num_iteration
-
-train(num_iteration=3000)
+    
+train(num_iteration=10000)
